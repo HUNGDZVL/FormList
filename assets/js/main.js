@@ -5,7 +5,6 @@ const App = $(".app");
 
 function start() {
   getDataFromJS(renderData);
-  checkSubmidOption();
 }
 start();
 
@@ -270,14 +269,13 @@ function valiDationForm(elementForm, itemobj) {
       elementForm.classList.add("warning");
       elementForm.classList.remove("active");
     } else if (elementForm.value !== "") {
-      console.log("oki");
       elementForm.classList.remove("warning");
       elementForm.classList.add("active");
     }
 
-    if (elementForm.name == "email" && regex.test(elementForm.value)) {
+    if (elementForm.name === "email" && regex.test(elementForm.value)) {
       elementForm.classList.add("active");
-    } else {
+    } else if (!regex.test(elementForm.value) && elementForm.name === "email") {
       elementForm.placeholder = itemobj.rules[0].message;
       elementForm.classList.add("warning");
       elementForm.classList.remove("active");
@@ -296,7 +294,19 @@ function valiDationForm(elementForm, itemobj) {
 function checkSubmitForm() {
   const submitForm = $(".submit");
   window.Checkoption = $("#vehicle p");
+
   submitForm.addEventListener("click", function () {
+    //check option ranked
+    const parenOption = $("#rank");
+
+    const checkItemOption = parenOption.querySelector("p");
+    const checkOP = checkItemOption.textContent.trim();
+    if (checkOP == textOption.trim()) {
+      parenOption.classList.add("warning");
+      console.log(checkOP, textOption.trim());
+    } else if (checkOP !== textOption.trim()) {
+      parenOption.classList.remove("warning");
+    }
     const formInputs = $$('input:not([name="verify_code"])');
     for (let item of formInputs) {
       if (item.value == "") {
@@ -307,17 +317,6 @@ function checkSubmitForm() {
         Checkoption.textContent = "Hãy chọn phương tiện";
         Checkoption.style.color = "red";
       }
-    }
-  });
-}
-
-function checkSubmidOption() {
-  const submitOption = $(".submit");
-  const parenOption = $("#rank");
-  const checkPtext = $(".check--item").textContent;
-  submitOption.addEventListener("click", () => {
-    if (checkPtext.trim() === textOption.trim()) {
-      parenOption.classList.add("warning");
     }
   });
 }
