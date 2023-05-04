@@ -442,7 +442,7 @@ function checkSubmitForm() {
         valueVehicle: tagPvehicle.textContent,
       };
       arrvalue.push(valuevehical);
-      console.log(arrvalue);
+      if (arrvalue.length > 3) console.log(arrvalue);
     }
 
     //check option ranked
