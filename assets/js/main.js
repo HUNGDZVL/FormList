@@ -8,16 +8,17 @@ function start() {
   getDataFromJS(renderData);
 }
 start();
-
+// hàm lấy data từ file js
 function getDataFromJS(renderData) {
   let data_ = {};
   data_ = dialog; //get data từ file js
   // gọi data trong file ra đưa vào function để xử lí ra form
-  const title = data_.header.title;
-  window.content = data_.content;
+  const title = data_.header.title;//
+  window.content = data_.content;// lấy phần thông tin thẻ tag
 
-  //đưa biến required ra ngoài window
+  //đưa biến required ra ngoài window để validate theo trường hợp
   window.requiredWarning = content[0].rules[0].message;
+  // goi hàm render data
   renderData(
     title,
     content,
@@ -35,7 +36,7 @@ function renderData(
   handleFocusDate,
   checkSubmitForm
 ) {
-  // tạo thẻ div chứa thẻ form header và tilte
+  // tạo thẻ div chứa thẻ form header và tilte,(header của form)
   const divHeader = document.createElement("div");
   divHeader.setAttribute("class", "app__header");
   const blockForm = document.createElement("form");
@@ -44,18 +45,21 @@ function renderData(
 
   headertitle.innerHTML = title;
 
-  // lồng thẻ vô nhau theo thứ tự
+  // lồng thẻ vô nhau theo thứ tự, Form > header > contetn
   divHeader.appendChild(headertitle);
+
   blockForm.appendChild(divHeader);
   // thêm vào Dom
   App.appendChild(blockForm);
 
   // duyệt qua tất cả thông tin content trong file js
   contents.map((item) => {
+    //lấy tất cac các thẻ có tag là input trừ nhưng input có type la file
     if (item.tag == "input" && item.type !== "file") {
       // tạo thẻ bao lấy form và các thẻ con chứa thông tin trong file js
       const divForm = document.createElement("div");
       divForm.setAttribute("class", "form__control");
+      // tạo thẻ con chứa trong form với các thông tin từ item (file js)
       const divIcon = document.createElement("div");
       divIcon.innerHTML = `<i class="fas ${item.icon}"></i>`;
       divIcon.setAttribute("class", "icon__form");
@@ -65,13 +69,14 @@ function renderData(
       if (item.type == "date") {
         elementForm.type = "text";
       }
+      // set giá trị có thẻ tag input
       elementForm.name = item.name;
       elementForm.placeholder = item.label;
       elementForm.id = item.id;
 
       divForm.appendChild(divIcon);
       divForm.appendChild(elementForm);
-      // thêm vào Dom
+      // thêm vào Dom theo thứ tự
       blockForm.appendChild(divForm);
 
       //tạo * để validate
@@ -80,16 +85,19 @@ function renderData(
 
       if (item.rules !== undefined) {
         // nếu có rules thì validate các item trong list data
+        //lấy các type trong rule add thêm * cho các item thỏa mãn rule khác null
         if (item.rules[0].type === "required") {
           spanRequired.classList.add("required");
           spanRequired.innerText = "*";
         }
+        // validte form theo từng item trong item khi thỏa rules (*)
         valiDationForm(elementForm, item);
-      }
+      }//thêm các * trong Dom
       divForm.appendChild(spanRequired);
     }
     // xử lí form hình ảnh
     if (item.id == "licence_code_image") {
+      // tạo phần header của form chứa hình ảnh
       const divFormImg = document.createElement("div");
       divFormImg.setAttribute("class", "form__control");
       const itemHeaderImg = document.createElement("div");
@@ -100,12 +108,14 @@ function renderData(
         <span><i class="fas fa-file-upload"></i></span>
 
       `;
+      // thêm giá trị con vào form img
       divFormImg.appendChild(itemHeaderImg);
-      //them form hình ảnh vô
+      //them form hình ảnh vô fomr chính
       blockForm.appendChild(divFormImg);
-      //block chứa img
+      //block chứa img (body)
       const areaDropImg = document.createElement("div");
       areaDropImg.setAttribute("class", "area-drop-img");
+      // tạo thẻ chứa hình ảnh thông tin text khi chưa chọn hình ảnh
 
       areaDropImg.innerHTML = `
                             <i class="fas fa-file-import"></i>
@@ -115,7 +125,7 @@ function renderData(
 
       // thêm đoạn text của form vo form chính
       blockForm.appendChild(areaDropImg);
-      // tạo thẻ input file để chọn hình ảnh
+      // tạo thẻ input file để chọn hình ảnh để none để ân trên trình duyệt
       const InputImg = document.createElement("div");
       InputImg.setAttribute("class", "wrapper__img");
       InputImg.innerHTML = `
@@ -146,7 +156,7 @@ function renderData(
           areaDropImg.style.backgroundImage = `url(${src})`;
         }
       });
-      //
+      // tạo phần footter của form chứa hình ảnh và thêm vào DOm
       const itemFooterImg = document.createElement("div");
       itemFooterImg.setAttribute("class", "form__footerimg");
       itemFooterImg.innerHTML = `
@@ -156,9 +166,10 @@ function renderData(
     }
     // xu lí form co option bằng lái
     if (item.tag == "select-multi") {
-      window.textOption = item.label;
+      window.textOption = item.label;// lấy phàn text của form thông qa biến local
       const selectOptionsRank = document.createElement("div");
       selectOptionsRank.setAttribute("class", "form__selectOp");
+      //tạo thẻ con chứa các thông tin của form chứa option
       const selectItmes = document.createElement("div");
       selectItmes.name = item.name;
       selectItmes.id = item.id;
@@ -167,15 +178,16 @@ function renderData(
      
       
       `;
+      //thêm validate
       const checkvalue = document.createElement("span");
       checkvalue.setAttribute("class", "requiredd");
       checkvalue.setAttribute("id", "setupvalue");
       checkvalue.textContent = "*";
-
+      // thêm các item vô trong Dom theo thứ tự
       selectOptionsRank.appendChild(selectItmes);
       selectOptionsRank.appendChild(checkvalue);
       blockForm.appendChild(selectOptionsRank);
-
+      // render các option trong item theo thứ tự
       const ListOptions = document.createElement("div");
       ListOptions.setAttribute("class", "list__option");
       ListOptions.innerHTML = item.options
@@ -189,12 +201,12 @@ function renderData(
       `
         )
         .join("");
-
+          //them optin vào Dom
       blockForm.appendChild(ListOptions);
-
+          // goi Hàm sử lí option
       choseIteminListItems(item);
     }
-    // xưr lí form phương tiện làm việc
+    // xư lí form phương tiện làm việc
     if (item.tag == "select") {
       const multiSelect = document.createElement("div");
       multiSelect.setAttribute("class", "selectop");
@@ -212,12 +224,13 @@ function renderData(
         `;
       multiSelect.appendChild(selectBox);
       blockForm.appendChild(multiSelect);
+      // thêm tag vô DOm
       //toggle option ân hiện option khi click
       selectBox.onclick = function () {
         const toggleoptions = $(".option__item");
         toggleoptions.classList.toggle("toggle");
       };
-      //render option ra giao diẹn
+      //render option ra giao diẹn theo các item có trong file js
       const optionChosen = document.createElement("div");
       optionChosen.setAttribute("class", "option__item");
       optionChosen.innerHTML = item.options
@@ -230,10 +243,11 @@ function renderData(
                                     `
         )
         .join("");
+        // thêm option vào trong Dom
       multiSelect.appendChild(optionChosen);
-
+          // goi hàm xử lí option vehicle
       choseItemOption(item);
-      // render block note
+      // render block note phía dưới vehical
       const selectNote = document.createElement("div");
       selectNote.setAttribute("class", "note");
       const contentNote = document.createElement("p");
@@ -241,7 +255,7 @@ function renderData(
       selectNote.appendChild(contentNote);
       multiSelect.appendChild(selectNote);
     }
-  });
+  });// tạo phàn footer của form
   const formFooter = document.createElement("div");
   formFooter.classList.add("form-footer");
   formFooter.innerHTML = `
@@ -249,21 +263,21 @@ function renderData(
             <button class="submit">Thêm</button>`;
   blockForm.appendChild(formFooter);
   formFooter.children[0].onclick = (e) => {
-    e.preventDefault();
+    e.preventDefault();// ngăn hanh vi mặc dinh của form
   };
   formFooter.children[1].onclick = (e) => {
     e.preventDefault();
   };
-  handleFocusDate();
-  checkSubmitForm(content);
+  handleFocusDate();// hàm xử lí date khi focus
+  checkSubmitForm();// gọi hàm submid form
 }
-
+// hàm xử lí các item trong option Rank
 function choseIteminListItems() {
   const formRank = $("#rank"); // lấy thẻ cha chứa phần tử
   const checkitem = $(".check--item"); // định danh mặc định
   const listItemsrank = $(".list__option"); // thẻ cha chứa option
   formRank.onclick = function () {
-    listItemsrank.classList.toggle("toggle");
+    listItemsrank.classList.toggle("toggle");// đóng mở option
   };
   const itemcheckbox = $$("input[type=checkbox]");
   // lấy tất cả các input type check box để kiểm tra thuộc tính check
@@ -308,7 +322,7 @@ function choseItemOption(item) {
   let inputname = item.name;
   window.checkPop = item.label;
   const divOption = $("#vehicle > p");
-  // lấy tât cả cacs the input có option
+  // lấy  the input vehicle  có option
   const options = $$(`input[name="${inputname}"]`);
   for (let i = 0; i < options.length; i++) {
     // gán event click cho từng option
@@ -320,6 +334,7 @@ function choseItemOption(item) {
       selectradiusactive.classList.remove("warning");
       Checkoption.style.color = "black";
       // chỉ cho phép chọn 1 option
+      //
       for (let j = i; j < options.length; j++) {
         if (i != j) {
           options[j].checked = false;
@@ -333,7 +348,7 @@ function handleFocusDate() {
   // ản hiện plachodler input date
   const dateForm = $("#end_date");
   dateForm.addEventListener("focus", () => {
-    dateForm.type = "date";
+    dateForm.type = "date";//hiện date khi focus vô trường
   });
   dateForm.addEventListener("blur", () => {
     dateForm.type = "text";
@@ -345,6 +360,7 @@ function valiDationForm(elementForm, itemobj) {
     let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     // xử lí trường đơn giản
     if (elementForm.value === "" && elementForm.name != "email") {
+      // nếu không phải là gmail thì validate các trường đó
       elementForm.placeholder = itemobj.rules[0].message;
       elementForm.classList.add("warning");
       elementForm.classList.remove("active");
@@ -352,7 +368,7 @@ function valiDationForm(elementForm, itemobj) {
       elementForm.classList.remove("warning");
       elementForm.classList.add("active");
     }
-    // xử lí form email
+    // xử lí form email validate trường email theo regex
     if (elementForm.name === "email" && regex.test(elementForm.value)) {
       elementForm.classList.add("active");
       elementForm.classList.remove("warning");
@@ -365,7 +381,7 @@ function valiDationForm(elementForm, itemobj) {
   });
   // xử lí hành vi focus
   elementForm.addEventListener("focus", () => {
-    checkdata = true;
+    checkdata = true;// điều kiện check data trong input để submir
     elementForm.classList.add("active");
     elementForm.classList.remove("warning");
 
@@ -375,30 +391,31 @@ function valiDationForm(elementForm, itemobj) {
 
 function checkSubmitForm() {
   const submitForm = $(".submit");
-  window.Checkoption = $("#vehicle p");
+  window.Checkoption = $("#vehicle p");// đặt biến global để lấy text
 
   submitForm.addEventListener("click", function () {
-    // check all form
+    // check all form bằng nút submit
 
-    const checkWaring = $$(".warning");
+    const checkWaring = $$(".warning"); // lấy tất cả warning để check
     // check data input khi submit va lay data input khi validate succes
     if (checkWaring.length > 0 && checkdata == true) {
-      console.log("nhập lại");
-    } else if (checkWaring && checkdata == true) {
+      console.log("nhập lại");// neu có warning thì cảnh báo
+    } else if (checkWaring && checkdata == true) {// không có warning thi xuất data từ form
       const valueinputs = $$("input.active");
       // lay tất cả giá trị thẻ input có active
-      let arrvalue = [];
+      let arrvalue = [];// dặt biến lưu data
 
-      for (let i = 0; i < valueinputs.length; i++) {
+      for (let i = 0; i < valueinputs.length; i++) {// lấy tất cả thẻ input các class là active 
         let name = valueinputs[i].name;
         let valueip = {
           [name]: valueinputs[i].value,
         };
+        // push key và value của từng input vô mảng
         arrvalue.push(valueip);
       }
       // lấy tất cả input không có active
 
-      const inputnumberinfo = $("#verify_code");
+      const inputnumberinfo = $("#verify_code");// duyẹt trường có id là verify và push value vô mảng 
       if (inputnumberinfo.value) {
         let name1 = inputnumberinfo.name;
         let valuenumber = {
@@ -408,6 +425,8 @@ function checkSubmitForm() {
       }
 
       // lay thẻ div có id la rank và class là active
+
+      // push tiếp value trường có id la rank và class là active vô mảng
       const idRank = $("#rank.active");
       if (idRank) {
         const tagPs = idRank.querySelectorAll("p");
@@ -431,37 +450,45 @@ function checkSubmitForm() {
         let valueimg = {
           url_img: url,
         };
+        // push value url hình ảnh vô mảng
         arrvalue.push(valueimg);
       } else {
         console.log("Không tìm thấy hình ảnh");
       }
       // lấy phương tiện di chuyển
+      //push tiếp giá trị vô mảng
       const divVehicle = $("#vehicle");
       const tagPvehicle = divVehicle.querySelector("p");
       let valuevehical = {
         valueVehicle: tagPvehicle.textContent,
       };
-      arrvalue.push(valuevehical);
+      arrvalue.push(valuevehical);// nếu độ dài mảng lớn hơn 3 phần tử thì sẽ xuất mảng bơi vì trong form có 3 trường k bắt buộc validate
       if (arrvalue.length > 3) console.log(arrvalue);
     }
 
-    //check option ranked
+    //check option ranked để validate
     const parenOption = $("#rank");
 
     const checkItemOption = parenOption.querySelector("p");
+    // lấy thẻ p trong tag cha chứa nó
     const checkOP = checkItemOption.textContent.trim();
     if (checkOP == textOption.trim()) {
+      // kiểm tra giá trị trong thẻ nếu là mặc định trong data.js thì add warning
       parenOption.classList.add("warning");
     } else if (checkOP !== textOption.trim()) {
-      parenOption.classList.remove("warning");
+      parenOption.classList.remove("warning");// xóa warning khi có data option
     }
+
+    // duyệt qa tất cả tag input trừ verify
     const formInputs = $$('input:not([name="verify_code"])');
     for (let item of formInputs) {
-      // check input ẩn của img để k cho add remove
+      // check input ẩn của img để k cho add remove,
+      //nếu data trong các trương bị trống thì sẽ add warning cảnh cáo
       if (item.value == "" && item.name != "licence_code_image") {
         item.classList.add("warning");
         item.placeholder = requiredWarning;
       }
+      // gắn điều kiện cho trường chọn phương tiện để check value mặc đinh của nó có hay không
       if (Checkoption.textContent == checkPop) {
         Checkoption.textContent = "Hãy chọn phương tiện";
         Checkoption.style.color = "red";
