@@ -463,7 +463,7 @@ function checkSubmitForm() {
         valueVehicle: tagPvehicle.textContent,
       };
       arrvalue.push(valuevehical);// nếu độ dài mảng lớn hơn 3 phần tử thì sẽ xuất mảng bơi vì trong form có 3 trường k bắt buộc validate
-      if (arrvalue.length > 3) console.log(arrvalue);
+      if (arrvalue.length > 7) console.log(arrvalue);
     }
 
     //check option ranked để validate
