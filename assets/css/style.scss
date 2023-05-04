@@ -49,7 +49,7 @@ body {
   justify-content: center;
   object-fit: cover;
   width: 100%;
-  //animation: move-background 2s ease-in-out infinite alternate;
+  //animation: move-background 0.2s ease-in-out infinite alternate;
   transition: transform linear;
 }
 
@@ -345,7 +345,7 @@ span.select-radius-icon {
   border-width: 2px;
   cursor: pointer;
   & i {
-    font-size: 1.2rem;
+    font-size: 2.4rem;
     color: #5169d2;
   }
 }

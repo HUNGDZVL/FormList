@@ -92,12 +92,7 @@ let dialog = {
       label: "Hình chụp bằng lái phương tiện [ Mặt trước ]",
       icon: "fa-image",
       note: "[ Hình chụp bằng lái sẽ được dùng để xác minh tài xế ]",
-      // rules: [
-      // 	{
-      // 		type: "required",
-      // 		message: "Trường bắt buộc"
-      // 	}
-      // ],
+      
     },
 
     {

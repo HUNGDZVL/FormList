@@ -315,6 +315,9 @@ function choseItemOption(item) {
     options[i].onclick = function () {
       // loai bỏ lựa chọn các input khác và gán giá trị được chọn cho thẻ chả phương tiện di chuyển hiện ra browser
       divOption.textContent = options[i].value;
+      const selectradiusactive = $(".select-radius");
+      selectradiusactive.classList.add("active");
+      selectradiusactive.classList.remove("warning");
       Checkoption.style.color = "black";
       // chỉ cho phép chọn 1 option
       for (let j = i; j < options.length; j++) {
@@ -352,6 +355,7 @@ function valiDationForm(elementForm, itemobj) {
     // xử lí form email
     if (elementForm.name === "email" && regex.test(elementForm.value)) {
       elementForm.classList.add("active");
+      elementForm.classList.remove("warning");
     } else if (!regex.test(elementForm.value) && elementForm.name === "email") {
       elementForm.placeholder = itemobj.rules[0].message;
       elementForm.classList.add("warning");
@@ -369,7 +373,7 @@ function valiDationForm(elementForm, itemobj) {
   });
 }
 
-function checkSubmitForm(content) {
+function checkSubmitForm() {
   const submitForm = $(".submit");
   window.Checkoption = $("#vehicle p");
 
@@ -378,26 +382,41 @@ function checkSubmitForm(content) {
 
     const checkWaring = $$(".warning");
     // check data input khi submit va lay data input khi validate succes
-    if (checkWaring.length > 1 && checkdata == true) {
+    if (checkWaring.length > 0 && checkdata == true) {
       console.log("nhập lại");
     } else if (checkWaring && checkdata == true) {
       const valueinputs = $$("input.active");
       // lay tất cả giá trị thẻ input có active
+      let arrvalue = [];
+
       for (let i = 0; i < valueinputs.length; i++) {
-        console.log(valueinputs[i].name, " : ", valueinputs[i].value);
+        let name = valueinputs[i].name;
+        let valueip = {
+          [name]: valueinputs[i].value,
+        };
+        arrvalue.push(valueip);
       }
       // lấy tất cả input không có active
 
       const inputnumberinfo = $("#verify_code");
       if (inputnumberinfo.value) {
-        console.log(inputnumberinfo.name,":",inputnumberinfo.value);
+        let name1 = inputnumberinfo.name;
+        let valuenumber = {
+          [name1]: inputnumberinfo.value,
+        };
+        arrvalue.push(valuenumber);
       }
 
       // lay thẻ div có id la rank và class là active
       const idRank = $("#rank.active");
-      const tagPs = idRank.querySelectorAll("p");
-      for (let i = 0; i < tagPs.length; i++) {
-        console.log("Rank:", tagPs[i].textContent);
+      if (idRank) {
+        const tagPs = idRank.querySelectorAll("p");
+        for (let i = 0; i < tagPs.length; i++) {
+          let valuerank = {
+            rank: tagPs[i].textContent,
+          };
+          arrvalue.push(valuerank);
+        }
       }
       // kiểm tra thẻ div xem có img hay không nếu có thì lấy url của img đó
       const divImg = $(".area-drop-img");
@@ -409,14 +428,21 @@ function checkSubmitForm(content) {
         const url = backgroundImg
           .replace(/^url\(["']?/, "")
           .replace(/["']?\)$/, "");
-        console.log("url-img:", url);
+        let valueimg = {
+          url_img: url,
+        };
+        arrvalue.push(valueimg);
       } else {
         console.log("Không tìm thấy hình ảnh");
       }
       // lấy phương tiện di chuyển
       const divVehicle = $("#vehicle");
       const tagPvehicle = divVehicle.querySelector("p");
-      console.log("value Vehicle: ", tagPvehicle.textContent);
+      let valuevehical = {
+        valueVehicle: tagPvehicle.textContent,
+      };
+      arrvalue.push(valuevehical);
+      console.log(arrvalue);
     }
 
     //check option ranked
@@ -431,7 +457,8 @@ function checkSubmitForm(content) {
     }
     const formInputs = $$('input:not([name="verify_code"])');
     for (let item of formInputs) {
-      if (item.value == "") {
+      // check input ẩn của img để k cho add remove
+      if (item.value == "" && item.name != "licence_code_image") {
         item.classList.add("warning");
         item.placeholder = requiredWarning;
       }
