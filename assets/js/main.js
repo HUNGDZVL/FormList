@@ -4,6 +4,7 @@ const $$ = document.querySelectorAll.bind(document);
 const App = $(".app");
 
 function start() {
+  // gọi hàm render data
   getDataFromJS(renderData);
 }
 start();
@@ -50,7 +51,7 @@ function renderData(
 
   // duyệt qua tất cả thông tin content trong file js
   contents.map((item) => {
-    if (item.tag == "input" && item.type != "file") {
+    if (item.tag == "input" && item.type !== "file") {
       // tạo thẻ bao lấy form và các thẻ con chứa thông tin trong file js
       const divForm = document.createElement("div");
       divForm.setAttribute("class", "form__control");
@@ -77,6 +78,7 @@ function renderData(
       // kiểm tra validation thông qua rules trong item
 
       if (item.rules !== undefined) {
+        // nếu có rules thì validate các item trong list data
         if (item.rules[0].type === "required") {
           spanRequired.classList.add("required");
           spanRequired.innerText = "*";
@@ -84,6 +86,73 @@ function renderData(
         valiDationForm(elementForm, item);
       }
       divForm.appendChild(spanRequired);
+    }
+    // xử lí form hình ảnh
+    if (item.id == "licence_code_image") {
+      const divFormImg = document.createElement("div");
+      divFormImg.setAttribute("class", "form__control");
+      const itemHeaderImg = document.createElement("div");
+      itemHeaderImg.setAttribute("class", "form__headerimg");
+      itemHeaderImg.innerHTML = `
+        <span><i class="fas ${item.icon}"></i></span>
+        <p>${item.label}</p>
+        <span><i class="fas fa-file-upload"></i></span>
+
+      `;
+      divFormImg.appendChild(itemHeaderImg);
+      //them form hình ảnh vô
+      blockForm.appendChild(divFormImg);
+      //block chứa img
+      const areaDropImg = document.createElement("div");
+      areaDropImg.setAttribute("class", "area-drop-img");
+
+      areaDropImg.innerHTML = `
+                            <i class="fas fa-file-import"></i>
+                            <p>Hãy tải hình ảnh lên để hiển thị</p>
+                            <p>Please upload pictures for display</p>
+                            `;
+
+      // thêm đoạn text của form vo form chính
+      blockForm.appendChild(areaDropImg);
+      // tạo thẻ input file để chọn hình ảnh
+      const InputImg = document.createElement("div");
+      InputImg.setAttribute("class", "wrapper__img");
+      InputImg.innerHTML = `
+                        
+                        <input style="display:none" id="${item.id}" name="${item.name}" type="${item.type}"
+                            accept="${item.upload}" class="form-control image-input" />
+                                      
+                    `;
+      // thêm input vào Dom
+      areaDropImg.appendChild(InputImg);
+      // xử lí event click chọn img
+      const formImgchosen = $(".area-drop-img");
+      const fileInput = $(`#${item.id}`);
+      // khi click vào đoạn text thì chon tới input file
+      console.log(formImgchosen, fileInput);
+      formImgchosen.onclick = () => {
+        fileInput.click();
+      };
+      // lấy giá trị input
+      fileInput.addEventListener("change", (e) => {
+        // neu nhu file có tồn tại thì
+        if (e.target.files.length) {
+          // lấy ra url của file chọn
+          const src = URL.createObjectURL(e.target.files[0]);
+
+          // reset nội dung thẻ areaDrop
+          areaDropImg.innerHTML = "";
+          //thêm css hình ảnh vô thẻ hiện ra màn hình
+          areaDropImg.style.backgroundImage = `url(${src})`;
+        }
+      });
+      //
+      const itemFooterImg = document.createElement("div");
+      itemFooterImg.setAttribute("class", "form__footerimg");
+      itemFooterImg.innerHTML = `
+      <p>${item.note}</p>
+      `;
+      blockForm.appendChild(itemFooterImg);
     }
 
     if (item.tag == "select-multi") {

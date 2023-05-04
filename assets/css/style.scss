@@ -35,6 +35,7 @@ $colorhighlight: linear-gradient(to right, #9ea7a9, #79d2f2);
 $colorbackground: #f6f6f6;
 $colorbackgroundicons: #50c6f0;
 $colorboder: #9ea7a9;
+$bgcoloropacity: #a4d8ec;
 
 // main css
 .app {
@@ -92,7 +93,7 @@ body {
   position: relative;
   width: 80%;
   display: flex;
-  margin: 10px auto;
+  margin: 10px 0 0 0;
   & input {
     font-size: 1.2rem;
     padding: 10px;
@@ -119,7 +120,7 @@ body {
 }
 
 .warning {
-  border: 2px solid red!important;
+  border: 2px solid red !important;
 }
 
 .active {
@@ -199,7 +200,7 @@ label {
   border-radius: 8px;
   display: flex;
   cursor: pointer;
-  & p{
+  & p {
     margin-right: 6px;
   }
 }
@@ -287,7 +288,7 @@ span.select-radius-icon {
 }
 .form__selectOp {
   width: 81%;
-  margin-left: 5px;
+  margin: 10px 0px 10px 5px;
   display: flex;
   & #rank {
     width: 100%;
@@ -300,4 +301,60 @@ span.select-radius-icon {
       color: $colorboder;
     }
   }
+}
+.form__headerimg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 1.2rem;
+  background: #a4d8ec;
+  & p {
+    margin: auto;
+  }
+  & span {
+    width: 26px;
+    height: 26px;
+    background-color: $colorbackgroundicons;
+    color: $colorbackground;
+    display: flex;
+    border-radius: 2px;
+    & i {
+      margin: auto;
+    }
+  }
+}
+.form__footerimg {
+  font-size: 1.2rem;
+  padding: 5px 20px;
+  border-radius: 2px;
+  margin: 10px 0;
+  background: $bgcoloropacity;
+}
+.area-drop-img {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+  margin: auto;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border: 1px dashed $colorbackgroundicons;
+  border-top: none;
+  border-width: 2px;
+  cursor: pointer;
+  & i {
+    font-size: 1.2rem;
+    color: #5169d2;
+  }
+}
+.wrapper__img {
+  display: none;
+}
+.area-drop-img {
+    height: 150px;
+    background-position: inherit;
+    background-repeat: no-repeat;
+    background-size: cover;
 }

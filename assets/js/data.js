@@ -99,13 +99,6 @@ let dialog = {
       // 	}
       // ],
     },
-    {
-      tag: "input",
-      type: "hidden",
-      name: "licence_code_image_url",
-      // disabled: true,
-      id: "licence_code_image_url",
-    },
 
     {
       tag: "input",
