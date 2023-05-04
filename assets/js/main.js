@@ -2,7 +2,7 @@ const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
 const App = $(".app");
-
+let checkdata = false;
 function start() {
   // gọi hàm render data
   getDataFromJS(renderData);
@@ -14,7 +14,8 @@ function getDataFromJS(renderData) {
   data_ = dialog; //get data từ file js
   // gọi data trong file ra đưa vào function để xử lí ra form
   const title = data_.header.title;
-  const content = data_.content;
+  window.content = data_.content;
+
   //đưa biến required ra ngoài window
   window.requiredWarning = content[0].rules[0].message;
   renderData(
@@ -129,7 +130,6 @@ function renderData(
       const formImgchosen = $(".area-drop-img");
       const fileInput = $(`#${item.id}`);
       // khi click vào đoạn text thì chon tới input file
-      console.log(formImgchosen, fileInput);
       formImgchosen.onclick = () => {
         fileInput.click();
       };
@@ -154,7 +154,7 @@ function renderData(
       `;
       blockForm.appendChild(itemFooterImg);
     }
-
+    // xu lí form co option bằng lái
     if (item.tag == "select-multi") {
       window.textOption = item.label;
       const selectOptionsRank = document.createElement("div");
@@ -194,11 +194,11 @@ function renderData(
 
       choseIteminListItems(item);
     }
-
+    // xưr lí form phương tiện làm việc
     if (item.tag == "select") {
       const multiSelect = document.createElement("div");
       multiSelect.setAttribute("class", "selectop");
-
+      // render data select ra giao diện
       const selectBox = document.createElement("div");
       selectBox.classList.add("selectBox");
       selectBox.innerHTML = `
@@ -212,12 +212,12 @@ function renderData(
         `;
       multiSelect.appendChild(selectBox);
       blockForm.appendChild(multiSelect);
-      //toggle option
+      //toggle option ân hiện option khi click
       selectBox.onclick = function () {
         const toggleoptions = $(".option__item");
         toggleoptions.classList.toggle("toggle");
       };
-      //render option
+      //render option ra giao diẹn
       const optionChosen = document.createElement("div");
       optionChosen.setAttribute("class", "option__item");
       optionChosen.innerHTML = item.options
@@ -255,7 +255,7 @@ function renderData(
     e.preventDefault();
   };
   handleFocusDate();
-  checkSubmitForm();
+  checkSubmitForm(content);
 }
 
 function choseIteminListItems() {
@@ -269,6 +269,8 @@ function choseIteminListItems() {
   // lấy tất cả các input type check box để kiểm tra thuộc tính check
   for (let i = 0; i < itemcheckbox.length; i++) {
     itemcheckbox[i].onclick = function () {
+      formRank.classList.remove("warning");
+      formRank.classList.add("active");
       // gán mỗi item check onclick
       // check xem phần tử nào dc check thì lấy giá trị của phần từ đó thêm vào thẻ Cha chứa nó
       if (itemcheckbox[i].checked) {
@@ -282,6 +284,8 @@ function choseIteminListItems() {
       } else {
         //nếu như hủy check thì xóa luôn phần tử đó đi
         const allPitem = $$("#rank p");
+        formRank.classList.remove("active");
+
         // lấy tất cả các thẻ p trong danh sạchs listitem
         for (let item of allPitem) {
           // nếu như phần tử bị disable checked thì kiểm tra id của phân tử đó vs id của phần tử item trong list
@@ -304,10 +308,12 @@ function choseItemOption(item) {
   let inputname = item.name;
   window.checkPop = item.label;
   const divOption = $("#vehicle > p");
+  // lấy tât cả cacs the input có option
   const options = $$(`input[name="${inputname}"]`);
   for (let i = 0; i < options.length; i++) {
+    // gán event click cho từng option
     options[i].onclick = function () {
-      // loai bỏ lựa chọn các input khác
+      // loai bỏ lựa chọn các input khác và gán giá trị được chọn cho thẻ chả phương tiện di chuyển hiện ra browser
       divOption.textContent = options[i].value;
       Checkoption.style.color = "black";
       // chỉ cho phép chọn 1 option
@@ -321,6 +327,7 @@ function choseItemOption(item) {
 }
 
 function handleFocusDate() {
+  // ản hiện plachodler input date
   const dateForm = $("#end_date");
   dateForm.addEventListener("focus", () => {
     dateForm.type = "date";
@@ -333,6 +340,7 @@ function handleFocusDate() {
 function valiDationForm(elementForm, itemobj) {
   elementForm.addEventListener("blur", function () {
     let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    // xử lí trường đơn giản
     if (elementForm.value === "" && elementForm.name != "email") {
       elementForm.placeholder = itemobj.rules[0].message;
       elementForm.classList.add("warning");
@@ -341,7 +349,7 @@ function valiDationForm(elementForm, itemobj) {
       elementForm.classList.remove("warning");
       elementForm.classList.add("active");
     }
-
+    // xử lí form email
     if (elementForm.name === "email" && regex.test(elementForm.value)) {
       elementForm.classList.add("active");
     } else if (!regex.test(elementForm.value) && elementForm.name === "email") {
@@ -351,8 +359,9 @@ function valiDationForm(elementForm, itemobj) {
       elementForm.value = "";
     }
   });
-
+  // xử lí hành vi focus
   elementForm.addEventListener("focus", () => {
+    checkdata = true;
     elementForm.classList.add("active");
     elementForm.classList.remove("warning");
 
@@ -360,11 +369,56 @@ function valiDationForm(elementForm, itemobj) {
   });
 }
 
-function checkSubmitForm() {
+function checkSubmitForm(content) {
   const submitForm = $(".submit");
   window.Checkoption = $("#vehicle p");
 
   submitForm.addEventListener("click", function () {
+    // check all form
+
+    const checkWaring = $$(".warning");
+    // check data input khi submit va lay data input khi validate succes
+    if (checkWaring.length > 1 && checkdata == true) {
+      console.log("nhập lại");
+    } else if (checkWaring && checkdata == true) {
+      const valueinputs = $$("input.active");
+      // lay tất cả giá trị thẻ input có active
+      for (let i = 0; i < valueinputs.length; i++) {
+        console.log(valueinputs[i].name, " : ", valueinputs[i].value);
+      }
+      // lấy tất cả input không có active
+
+      const inputnumberinfo = $("#verify_code");
+      if (inputnumberinfo.value) {
+        console.log(inputnumberinfo.name,":",inputnumberinfo.value);
+      }
+
+      // lay thẻ div có id la rank và class là active
+      const idRank = $("#rank.active");
+      const tagPs = idRank.querySelectorAll("p");
+      for (let i = 0; i < tagPs.length; i++) {
+        console.log("Rank:", tagPs[i].textContent);
+      }
+      // kiểm tra thẻ div xem có img hay không nếu có thì lấy url của img đó
+      const divImg = $(".area-drop-img");
+      // lay style tag div
+      const styleDivImg = window.getComputedStyle(divImg);
+      const backgroundImg = styleDivImg.getPropertyValue("background-image");
+      if (backgroundImg) {
+        // Loại bỏ những ký tự không cần thiết trong chuỗi giá trị
+        const url = backgroundImg
+          .replace(/^url\(["']?/, "")
+          .replace(/["']?\)$/, "");
+        console.log("url-img:", url);
+      } else {
+        console.log("Không tìm thấy hình ảnh");
+      }
+      // lấy phương tiện di chuyển
+      const divVehicle = $("#vehicle");
+      const tagPvehicle = divVehicle.querySelector("p");
+      console.log("value Vehicle: ", tagPvehicle.textContent);
+    }
+
     //check option ranked
     const parenOption = $("#rank");
 
@@ -372,7 +426,6 @@ function checkSubmitForm() {
     const checkOP = checkItemOption.textContent.trim();
     if (checkOP == textOption.trim()) {
       parenOption.classList.add("warning");
-      console.log(checkOP, textOption.trim());
     } else if (checkOP !== textOption.trim()) {
       parenOption.classList.remove("warning");
     }

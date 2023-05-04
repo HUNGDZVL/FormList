@@ -116,7 +116,7 @@ body {
 }
 
 .active {
-  border: 2px solid #72ee8d;
+  border: 2px solid #72ee8d !important;
 }
 
 .active::placeholder {
@@ -360,7 +360,7 @@ span.select-radius-icon {
 }
 
 .area-drop-img {
-  height: 150px;
+  height: 200px;
   background-position: inherit;
   background-repeat: no-repeat;
   background-size: cover;

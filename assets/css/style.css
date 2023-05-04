@@ -39,8 +39,7 @@ body {
   background-repeat: repeat-y;
   display: flex;
   justify-content: center;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   width: 100%;
   transition: transform linear;
 }
@@ -116,19 +115,11 @@ body {
 }
 
 .active {
-  border: 2px solid #72ee8d;
-}
-
-.active::-moz-placeholder {
-  color: #9ea7a9;
+  border: 2px solid #72ee8d !important;
 }
 
 .active::placeholder {
   color: #9ea7a9;
-}
-
-.warning::-moz-placeholder {
-  color: red;
 }
 
 .warning::placeholder {
@@ -368,8 +359,10 @@ span.select-radius-icon {
 }
 
 .area-drop-img {
-  height: 150px;
+  height: 200px;
   background-position: inherit;
   background-repeat: no-repeat;
   background-size: cover;
-}/*# sourceMappingURL=style.css.map */
+}
+
+/*# sourceMappingURL=style.css.map */
