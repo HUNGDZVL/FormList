@@ -35,12 +35,7 @@ let dialog = {
         },
       ],
 
-      options: [
-        {
-          value: "43J43434",
-          text: "63U87639",
-        },
-      ],
+      options: [{ value: "63U87639", text: "63U87639" }],
     },
 
     {
