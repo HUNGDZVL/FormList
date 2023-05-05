@@ -248,7 +248,11 @@ function renderData(
       // thêm tag vô DOm
       //toggle option ân hiện option khi click
       selectBox.addEventListener("click", function (e) {
-        const toggleoptions = $(".option__item");
+        // lấy ra thẻ cha chứa phạm vi click của thẻ chứa event
+        const listItemOp = e.target.parentNode.parentNode;
+        console.log(listItemOp);
+        const toggleoptions = listItemOp.querySelector(".option__item");
+        console.log(toggleoptions);// thực hiện toggle chính trong phạm vi thẻ đó
         toggleoptions.classList.toggle("toggle");
       });
       //render option ra giao diẹn theo các item có trong file js
@@ -266,6 +270,7 @@ function renderData(
         .join("");
       // thêm option vào trong Dom
       multiSelect.appendChild(optionChosen);
+
       // goi hàm xử lí option vehicle
       choseItemOption(item);
       // render block note phía dưới vehical
