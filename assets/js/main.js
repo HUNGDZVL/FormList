@@ -5,7 +5,7 @@ const App = $(".app");
 let checkdata = false; // checkdata trong trường trước khi submit
 let checkitem = 0; //checkrulse để submit
 window.valuecheckPop = [];
-
+window.allcheckemlemnt = [];
 function start() {
   // gọi hàm render data
   getDataFromJS(renderData);
@@ -352,6 +352,9 @@ function choseItemOption(item) {
 
   window.checkPop = item.label;
   valuecheckPop.push(checkPop);
+
+  window.checkelementitemid = `#${item.id}`;
+  allcheckemlemnt.push(checkelementitemid);
   const divOption = $(`#${item.id} > p`);
   // lấy  the input vehicle  có option
   const options = $$(`input[name="${inputname}"]`);
@@ -431,8 +434,23 @@ function checkSubmitForm() {
   const submitForm = $(".submit");
 
   submitForm.addEventListener("click", function () {
-    // check all form bằng nút submit
+    // lấy data của các trường bình thường
+    const allinputnomarl = $$(
+      "input:not(.checkrequired):not(._radio-input):not(.optionRank)"
+    );
+    //get data tu form input bth
+    let arrvalue = []; // dặt biến lưu data
+    for (let item of allinputnomarl) {
+      if (item.value !== "") {
+        let names = item.name;
+        let valuebth = {
+          [names]: item.value,
+        };
+        arrvalue.push(valuebth);
+      }
+    }
 
+    // check all form bằng nút submit
     const checkWaring = $$(".warning"); // lấy tất cả warning để check
     // check data input khi submit va lay data input khi validate succes
     if (checkWaring.length > 0 && checkdata == true) {
@@ -441,7 +459,6 @@ function checkSubmitForm() {
       // không có warning thi xuất data từ form
       const valueinputs = $$("input.active");
       // lay tất cả giá trị thẻ input có active
-      let arrvalue = []; // dặt biến lưu data
 
       for (let i = 0; i < valueinputs.length; i++) {
         // lấy tất cả thẻ input các class là active
@@ -500,13 +517,17 @@ function checkSubmitForm() {
       }
       // lấy phương tiện di chuyển
       //push tiếp giá trị vô mảng
-      const divVehicle = $("#vehicle");
-      if (divVehicle) {
-        const tagPvehicle = divVehicle.querySelector("p");
-        let valuevehical = {
-          valueVehicle: tagPvehicle.textContent,
-        };
-        arrvalue.push(valuevehical);
+      //check tất cả các trường có option để lấy data
+      for (let item of allcheckemlemnt) {
+        const divVehicle = $(item);
+        if (divVehicle) {
+          const tagPvehicle = divVehicle.querySelector("p");
+          let names = divVehicle.id;
+          let valuevehical = {
+            [names]: tagPvehicle.textContent,
+          };
+          arrvalue.push(valuevehical);
+        }
       } // nếu độ dài mảng lớn hơn = checkitem validate phần tử thì sẽ xuất mảng bơi vì trong form có 3 trường k bắt buộc validate
       if (arrvalue.length >= checkitem) console.log(arrvalue);
       else {
@@ -539,10 +560,10 @@ function checkSubmitForm() {
       }
     }
     //
-    const Checkoptions = $$(".select-radius p");
 
     // đặt biến global để lấy text
 
+    const Checkoptions = $$(".select-radius p");
     // gắn điều kiện cho trường chọn phương tiện để check value mặc đinh của nó có hay không
     // trường hợp có nhiều trường khac nữa
 

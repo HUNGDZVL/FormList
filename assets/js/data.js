@@ -36,9 +36,10 @@ let dialog = {
       ],
 
       options: [
-        { value: "63U87639", text: "63U87639" },
-        { value: "43J43434", text: "63U87639" },
-        { value: "34L23232", text: "63U87639" },
+        {
+          value: "43J43434",
+          text: "63U87639",
+        },
       ],
     },
 
@@ -65,11 +66,7 @@ let dialog = {
 
       // ],
 
-      options: [
-        { value: "63U87639", text: "63U87639" },
-        { value: "43J43434", text: "63U87639" },
-        { value: "34L23232", text: "63U87639" },
-      ],
+      options: [],
     },
 
     {
