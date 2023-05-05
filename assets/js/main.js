@@ -2,8 +2,8 @@ const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
 const App = $(".app");
-let checkdata = false;
-let checkitem = 0;
+let checkdata = false; // checkdata trong trường trước khi submit
+let checkitem = 0; //checkrulse để submit
 window.valuecheckPop = [];
 
 function start() {
@@ -250,10 +250,11 @@ function renderData(
       selectBox.addEventListener("click", function (e) {
         // lấy ra thẻ cha chứa phạm vi click của thẻ chứa event
         const listItemOp = e.target.parentNode.parentNode;
-        console.log(listItemOp);
         const toggleoptions = listItemOp.querySelector(".option__item");
-        console.log(toggleoptions);// thực hiện toggle chính trong phạm vi thẻ đó
-        toggleoptions.classList.toggle("toggle");
+        // thực hiện toggle chính trong phạm vi thẻ đó
+        if (toggleoptions) {
+          toggleoptions.classList.toggle("toggle");
+        }
       });
       //render option ra giao diẹn theo các item có trong file js
       const optionChosen = document.createElement("div");
@@ -356,10 +357,13 @@ function choseItemOption(item) {
   const options = $$(`input[name="${inputname}"]`);
   for (let i = 0; i < options.length; i++) {
     // gán event click cho từng option
-    options[i].onclick = function () {
+    options[i].onclick = function (e) {
       // loai bỏ lựa chọn các input khác và gán giá trị được chọn cho thẻ chả phương tiện di chuyển hiện ra browser
       divOption.textContent = options[i].value;
-      const selectradiusactive = $(".select-radius");
+      // check lay option cha lớn nhất để xác đinh vị trí remove add class active vs warning trong trường hợp nhiều form giống nhau trong form
+      const parenOptionsmini = e.target.parentNode.parentNode.parentNode;
+      const selectradiusactive =
+        parenOptionsmini.querySelector(".select-radius");
       selectradiusactive.classList.add("active");
       selectradiusactive.classList.remove("warning");
       const colorp = selectradiusactive.querySelector("p");
