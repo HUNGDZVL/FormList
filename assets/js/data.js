@@ -1,141 +1,182 @@
 let dialog = {
   header: {
-    title: "Thêm tài xế",
+    title: "Cáº­p nháº­t Doanh nghiá»‡p",
   },
+
   content: [
     {
       tag: "input",
-      type: "text",
-      name: "fullname",
-      id: "fullname",
-      label: "Tên tài xế",
-      icon: "fa-user",
-      rules: [
-        {
-          type: "required",
-          message: "Trường bắt buộc",
-        },
-      ],
-    },
-    {
-      tag: "input",
-      type: "number",
-      name: "licence_code",
-      id: "licence_code",
-      label: "Bằng lái phương tiện",
-      icon: "fa-id-card",
-      rules: [
-        {
-          type: "required",
-          message: "Trường bắt buộc",
-        },
-      ],
-    },
-    {
-      tag: "input",
-      type: "date",
-      name: "end_date",
-      id: "end_date",
-      label: "Ngày hết hạn bằng lái [ tháng/ngày/năm ]",
-      icon: "fa-calendar-alt",
-      rules: [
-        {
-          type: "required",
-          message: "Trường bắt buộc",
-        },
-      ],
+
+      type: "hidden",
+
+      name: "id_up",
+
+      disabled: true,
+
+      id: "id_up",
     },
 
-    {
-      tag: "input",
-      type: "number",
-      name: "verify_code",
-      id: "verify_code",
-      label: "Số CMND/CCCD [ Nếu có ]",
-      icon: "fa-id-card",
-      // rules: [
-      // 	{
-      // 		type: "required",
-      // 		message: "Trường bắt buộc"
-      // 	}
-      // ],
-    },
-    {
-      tag: "select-multi",
-      name: "rank",
-      id: "rank",
-      label: "Hạng bằng lái [ có thể chọn nhiều ]",
-      // rules: [
-      // 	{
-      // 		type: "required",
-      // 		message: "Trường bắt buộc"
-      // 	}
-      // ],
-      options: [
-        { value: "C", text: "Hạng C" },
-        { value: "D", text: "Hạng D" },
-        { value: "E", text: "Hạng E" },
-        { value: "FB2", text: "Hạng FB2" },
-        { value: "FC", text: "Hạng FC" },
-        { value: "FD", text: "Hạng FD" },
-        { value: "FE", text: "Hạng FE" },
-        { value: "A", text: "Hạng A" },
-        { value: "B", text: "Hạng B" },
-      ],
-    },
-    {
-      tag: "input",
-      type: "file",
-      upload: "image/*",
-      name: "licence_code_image",
-      id: "licence_code_image",
-      label: "Hình chụp bằng lái phương tiện [ Mặt trước ]",
-      icon: "fa-image",
-      note: "[ Hình chụp bằng lái sẽ được dùng để xác minh tài xế ]",
-      
-    },
-
-    {
-      tag: "input",
-      type: "number",
-      name: "phone",
-      id: "phone",
-      label: "Số điện thoại",
-      icon: "fa-phone",
-      rules: [
-        {
-          type: "required",
-          message: "Trường bắt buộc",
-        },
-      ],
-    },
-    {
-      tag: "input",
-      type: "text",
-      name: "email",
-      id: "email",
-      label: "@gmail.com",
-      icon: "fa-envelope",
-      rules: [
-        {
-          type: "required",
-          message: "email không hợp lệ",
-        },
-      ],
-    },
     {
       tag: "select",
-      name: "vehicle",
-      id: "vehicle",
-      label: "Phương tiện làm việc",
-      icon: "fa-paper-plane",
+
+      name: "type_company_up",
+
+      id: "type_company_up",
+
+      label: "KhÃ¡ch hÃ ng lÃ ",
+
+      icon: "fa-tags",
+
       rules: [
         {
           type: "required",
-          message: "Trường bắt buộc",
+
+          message: "TrÆ°á»ng báº¯t buá»™c",
         },
       ],
-      note: "Những xe tích truyền hình ảnh về Tổng Cục Đường Bộ yêu cầu tài xế và xe phải được xác minh mới được gán thông tin với nhau",
+
+      options: [],
+    },
+
+    {
+      tag: "select",
+
+      name: "parent_id_up",
+
+      id: "parent_id_up",
+
+      label: "Quáº£n lÃ½ bá»Ÿi",
+
+      icon: "fa-tags",
+
+      // rules: [
+
+      //   {
+
+      // 	type: "required",
+
+      // 	message: "TrÆ°á»ng báº¯t buá»™c"
+
+      //   }
+
+      // ],
+
+      options: [],
+    },
+
+    {
+      tag: "input",
+
+      name: "shortname_up",
+
+      id: "shortname_up",
+
+      label: "TÃªn khÃ¡ch hÃ ng",
+
+      icon: "fa-address-card",
+
+      rules: [
+        {
+          type: "required",
+
+          message: "TrÆ°á»ng báº¯t buá»™c",
+        },
+      ],
+    },
+
+    {
+      tag: "input",
+
+      name: "fullname_up",
+
+      id: "fullname_up",
+
+      label: "TÃªn Ä‘áº§y Ä‘á»§",
+
+      icon: "fa-address-card",
+    },
+
+    {
+      tag: "input",
+
+      name: "address_up",
+
+      id: "address_up",
+
+      label: "Äá»‹a chá»‰",
+
+      icon: "fa-map-marked-alt",
+    },
+
+    {
+      tag: "input",
+
+      name: "website_up",
+
+      id: "website_up",
+
+      label: "Website",
+
+      icon: "fa-pager",
+    },
+
+    {
+      tag: "input",
+
+      type: "number",
+
+      name: "hotline_up",
+
+      id: "hotline_up",
+
+      label: "Sá»‘ Ä‘iá»‡n thoáº¡i",
+
+      icon: "fa-phone",
+    },
+
+    {
+      tag: "input",
+
+      name: "taxcode_up",
+
+      id: "taxcode_up",
+
+      label: "MÃ£ sá»‘ thuáº¿",
+
+      icon: "fa-id-card-alt",
+    },
+
+    {
+      tag: "input",
+
+      name: "email_up",
+
+      id: "email_up",
+
+      label: "Email",
+
+      icon: "fa-envelope-square",
+    },
+
+    {
+      tag: "select",
+
+      name: "active_up",
+
+      id: "active_up",
+
+      label: "Tráº¡ng thÃ¡i",
+
+      icon: "fa-star",
+
+      rules: [
+        {
+          type: "required",
+
+          message: "TrÆ°á»ng báº¯t buá»™c",
+        },
+      ],
+
       options: [
         { value: "63U87639", text: "63U87639" },
         { value: "43J43434", text: "63U87639" },

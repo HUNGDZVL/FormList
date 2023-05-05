@@ -4,6 +4,7 @@ const $$ = document.querySelectorAll.bind(document);
 const App = $(".app");
 let checkdata = false;
 let checkitem = 0;
+window.valuecheckPop = [];
 
 function start() {
   // gọi hàm render data
@@ -23,7 +24,6 @@ function getDataFromJS(renderData) {
       checkitem++;
     }
   }
-  console.log(checkitem);
   //đưa biến required ra ngoài window để validate theo trường hợp
   // goi hàm render data
   renderData(
@@ -231,7 +231,8 @@ function renderData(
           <div class="overSelect"></div>
           <span class="select-radius-icon"><i class="fas fa-paper-plane"></i></span>
         `;
-      if (item.rules) {
+      window.checkruleseclect = item.rules;
+      if (checkruleseclect) {
         selectBox.innerHTML = `
             <div class='select-radius' id="${item.id}">
           <p>${item.label}</p>
@@ -246,10 +247,10 @@ function renderData(
       blockForm.appendChild(multiSelect);
       // thêm tag vô DOm
       //toggle option ân hiện option khi click
-      selectBox.onclick = function () {
+      selectBox.addEventListener("click", function (e) {
         const toggleoptions = $(".option__item");
         toggleoptions.classList.toggle("toggle");
-      };
+      });
       //render option ra giao diẹn theo các item có trong file js
       const optionChosen = document.createElement("div");
       optionChosen.setAttribute("class", "option__item");
@@ -268,12 +269,14 @@ function renderData(
       // goi hàm xử lí option vehicle
       choseItemOption(item);
       // render block note phía dưới vehical
-      const selectNote = document.createElement("div");
-      selectNote.setAttribute("class", "note");
-      const contentNote = document.createElement("p");
-      contentNote.textContent = item.note;
-      selectNote.appendChild(contentNote);
-      multiSelect.appendChild(selectNote);
+      if (item.note) {
+        const selectNote = document.createElement("div");
+        selectNote.setAttribute("class", "note");
+        const contentNote = document.createElement("p");
+        contentNote.textContent = item.note;
+        selectNote.appendChild(contentNote);
+        multiSelect.appendChild(selectNote);
+      }
     }
   }); // tạo phàn footer của form
   const formFooter = document.createElement("div");
@@ -340,8 +343,10 @@ function choseIteminListItems() {
 
 function choseItemOption(item) {
   let inputname = item.name;
+
   window.checkPop = item.label;
-  const divOption = $("#vehicle > p");
+  valuecheckPop.push(checkPop);
+  const divOption = $(`#${item.id} > p`);
   // lấy  the input vehicle  có option
   const options = $$(`input[name="${inputname}"]`);
   for (let i = 0; i < options.length; i++) {
@@ -352,8 +357,10 @@ function choseItemOption(item) {
       const selectradiusactive = $(".select-radius");
       selectradiusactive.classList.add("active");
       selectradiusactive.classList.remove("warning");
-      Checkoption.style.color = "black";
+      const colorp = selectradiusactive.querySelector("p");
+      colorp.style.color = "black";
       // chỉ cho phép chọn 1 option
+      selectradiusactive.classList.remove("warning");
       //
       for (let j = i; j < options.length; j++) {
         if (i != j) {
@@ -413,7 +420,6 @@ function valiDationForm(elementForm, itemobj) {
 
 function checkSubmitForm() {
   const submitForm = $(".submit");
-  window.Checkoption = $("#vehicle p"); // đặt biến global để lấy text
 
   submitForm.addEventListener("click", function () {
     // check all form bằng nút submit
@@ -481,7 +487,7 @@ function checkSubmitForm() {
         // push value url hình ảnh vô mảng
         arrvalue.push(valueimg);
       } else {
-        console.log("Không tìm thấy hình ảnh");
+        console.log("no img");
       }
       // lấy phương tiện di chuyển
       //push tiếp giá trị vô mảng
@@ -491,8 +497,11 @@ function checkSubmitForm() {
         let valuevehical = {
           valueVehicle: tagPvehicle.textContent,
         };
-        arrvalue.push(valuevehical); // nếu độ dài mảng lớn hơn 3 phần tử thì sẽ xuất mảng bơi vì trong form có 3 trường k bắt buộc validate
-        if (arrvalue.length >= checkitem) console.log(arrvalue);
+        arrvalue.push(valuevehical);
+      } // nếu độ dài mảng lớn hơn = checkitem validate phần tử thì sẽ xuất mảng bơi vì trong form có 3 trường k bắt buộc validate
+      if (arrvalue.length >= checkitem) console.log(arrvalue);
+      else {
+        console.log("chưa điền xong");
       }
     }
 
@@ -519,10 +528,34 @@ function checkSubmitForm() {
         item.classList.add("warning");
         item.placeholder = requiredWarning;
       }
-      // gắn điều kiện cho trường chọn phương tiện để check value mặc đinh của nó có hay không
-      if (Checkoption && Checkoption.textContent == checkPop) {
-        Checkoption.textContent = "Hãy chọn phương tiện";
-        Checkoption.style.color = "red";
+    }
+    //
+    const Checkoptions = $$(".select-radius p");
+
+    // đặt biến global để lấy text
+
+    // gắn điều kiện cho trường chọn phương tiện để check value mặc đinh của nó có hay không
+    // trường hợp có nhiều trường khac nữa
+
+    for (let i = 0; i < valuecheckPop.length; i++) {
+      // duyệt ra các trường để lấy label tương ứng của tường
+      for (let j = 0; j < Checkoptions.length; j++) {
+        // duyêt của tất cả text mặc định của trường để lấy ra so sánh
+        if (valuecheckPop[i].trim() == Checkoptions[j].textContent.trim()) {
+          // nếu text của trường == nội dung label thì cảnh thì...
+          const checkrequiredselect = Checkoptions[j].parentNode.parentNode;
+          const addwarning =
+            checkrequiredselect.querySelector(".select-radius");
+          const checksaoselect =
+            checkrequiredselect.querySelector(".requiredd");
+          // lấy ra các rule warning trong các trường đang check
+          if (checksaoselect) {
+            // nếu trường đó tồn tại các rule warning thỉ cảnh cáo
+            Checkoptions[j].textContent = "Hãy chọn options";
+            Checkoptions[j].style.color = "red";
+            addwarning.classList.add("warning");
+          }
+        }
       }
     }
   });
