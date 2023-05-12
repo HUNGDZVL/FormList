@@ -547,6 +547,11 @@ function checkSubmitForm() {
       } else if (checkOP !== textOption.trim()) {
         parenOption.classList.remove("warning"); // xóa warning khi có data option
       }
+      let names = parenOption.id;
+      let valuerank = {
+        [names]: checkItemOption.textContent,
+      };
+      arrvalue.push(valuerank);
     }
     // duyệt qa tất cả tag input trừ verify
 
